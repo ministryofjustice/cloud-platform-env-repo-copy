@@ -4,4 +4,5 @@ jobs:
   run_tools:
     container:
       image: ministryofjustice/cloud-platform-tools:1.4-test
-      options: --entrypoint ruby action.rb
+    steps:
+      - run: ruby action.rb
