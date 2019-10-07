@@ -9,4 +9,5 @@ jobs:
       - uses: actions/checkout@master
       - run: pwd
       - run: ls
+      - run: ls bin
       - run: ruby bin/action.rb
