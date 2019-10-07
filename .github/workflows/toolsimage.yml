@@ -5,5 +5,3 @@ jobs:
     container:
       image: ministryofjustice/cloud-platform-tools:1.4-test
       options: --entrypoint ruby action.rb
-    steps:
-      - name: ruby
