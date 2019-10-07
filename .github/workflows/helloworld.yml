@@ -7,4 +7,4 @@ jobs:
     steps:
       - name: Hello World action step
         id: hello
-        uses: ministryofjustice/cloud-platform-github-actions-env-repo@v1.6
+        uses: ministryofjustice/cloud-platform-github-actions-env-repo@v1.7
