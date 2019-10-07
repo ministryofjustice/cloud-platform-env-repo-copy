@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@master
       - run: pwd
       - run: ls
-      - run: ruby action.rb
+      - run: ruby .github/workflows/action.rb
