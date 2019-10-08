@@ -2,7 +2,7 @@
 
 require "json"
 require "octokit"
-# require "pry-byebug"
+require "pry-byebug"
 
 # TODO: how to display an informative failure message?
 # TODO: give the action a name that displays in the workflow
@@ -11,15 +11,15 @@ require "octokit"
 # TODO: replace the default icon for the bot
 
 def github_client
-  unless ENV.has_key?("GITHUB_TOKEN")
+  unless ENV.key?("GITHUB_TOKEN")
     raise "No GITHUB_TOKEN env. var. found. Please make this available via the github actions workflow\nhttps://help.github.com/en/articles/virtual-environments-for-github-actions#github_token-secret"
   end
 
-  @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+  @client ||= Octokit::Client.new(access_token: ENV["GITHUB_TOKEN"])
 end
 
 def event
-  @evt ||= JSON.parse File.read(ENV['GITHUB_EVENT_PATH'])
+  @evt ||= JSON.parse File.read(ENV["GITHUB_EVENT_PATH"])
 end
 
 def repo
@@ -44,9 +44,23 @@ def reject_pr(message)
   exit 1
 end
 
-puts File.read(ENV['GITHUB_EVENT_PATH'])
-# pp github_client.pull_request_files(repo, 11)
+def namespaces_touched_by_pr
+  github_client.pull_request_files(repo, pr_number)
+    .map(&:filename)
+    .grep(/namespaces.live-1.cloud-platform.service.justice.gov.uk/)
+    .map { |f| File.dirname(f) }
+    .map { |f| f.split("/") }
+    .map { |arr| arr[2] }
+    .sort
+    .uniq
+end
+
+namespaces = namespaces_touched_by_pr
 
 # PRs which touch no namespaces are fine
 # PRs which touch one namespace are fine
-# reject_pr("You shall not pass.") if number_of_namespaces > 1
+if namespaces.size > 1
+  namespace_list = namespaces.map {|n| "  * #{n}"}.join("\n")
+  message = "This PR affects multiple namespaces\n\n#{namespace_list}\n\nPlease submit a separate PR for each namespace."
+  reject_pr(message)
+end
