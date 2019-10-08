@@ -3,6 +3,12 @@
 require "json"
 require "octokit"
 
+# TODO: how to display an informative failure message?
+# TODO: give the action a name that displays in the workflow
+# TODO: allow PRs that don't touch the namespaces folder(s)
+# TODO: allow PRs that only touch one namespace folder
+# TODO: replace the default icon for the bot
+
 def github_client
   unless ENV.has_key?("GITHUB_TOKEN")
     raise "No GITHUB_TOKEN env. var. found. Please make this available via the github actions workflow\nhttps://help.github.com/en/articles/virtual-environments-for-github-actions#github_token-secret"
@@ -37,4 +43,8 @@ def reject_pr(message)
   exit 1
 end
 
-reject_pr("You shall not pass.")
+puts "token: #{ENV['GITHUB_TOKEN'])}"
+
+# PRs which touch no namespaces are fine
+# PRs which touch one namespace are fine
+# reject_pr("You shall not pass.") if number_of_namespaces > 1
