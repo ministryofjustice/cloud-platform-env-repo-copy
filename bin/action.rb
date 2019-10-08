@@ -10,6 +10,8 @@ puts `which git`
 
 # puts File.read(".git/config")
 
+pp ENV
+
 event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
 # puts event.inspect
 # puts File.read(ENV['GITHUB_EVENT_PATH'])
