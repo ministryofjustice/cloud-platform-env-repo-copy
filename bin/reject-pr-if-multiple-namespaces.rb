@@ -43,7 +43,7 @@ def reject_pr(message)
   exit 1
 end
 
-puts "token: #{ENV['GITHUB_TOKEN'])}"
+puts "token: #{ENV['GITHUB_TOKEN']}"
 
 # PRs which touch no namespaces are fine
 # PRs which touch one namespace are fine
