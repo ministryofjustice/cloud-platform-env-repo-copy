@@ -2,6 +2,8 @@
 
 require 'json'
 
+
+
 # Output a list of all TLS secrets in the cluster, for which there is no
 # matching (i.e. with the same name) certificate object in the same namespace.
 #
