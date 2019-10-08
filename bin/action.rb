@@ -7,6 +7,8 @@ puts "Terraform is at..."
 puts `which terraform`
 puts `which git`
 
+puts File.read(".git/config")
+
 # event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
 # puts event.inspect
 # puts File.read(ENV['GITHUB_EVENT_PATH'])
