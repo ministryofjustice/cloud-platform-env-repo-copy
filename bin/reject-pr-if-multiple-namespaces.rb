@@ -3,42 +3,37 @@
 require "json"
 require "octokit"
 
-puts "hello from the PR rejecter"
+def github_client
+  unless ENV.has_key?("GITHUB_TOKEN")
+    raise "No GITHUB_TOKEN env. var. found. Please make this available via the github actions workflow\nhttps://help.github.com/en/articles/virtual-environments-for-github-actions#github_token-secret"
+  end
 
-data = JSON.parse File.read(ENV['GITHUB_EVENT_PATH'])
+  @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+end
 
-pr_number = data.dig("pull_request", "number")
-puts "pr_number: #{pr_number}"
+def event
+  @evt ||= JSON.parse File.read(ENV['GITHUB_EVENT_PATH'])
+end
 
-name = data.dig("repository", "name")
-owner = data.dig("repository", "owner", "login")
-repo = [owner, name].join("/")
+def repo
+  name = event.dig("repository", "name")
+  owner = event.dig("repository", "owner", "login")
+  [owner, name].join("/")
+end
 
-client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
-# current_repo = Octokit::Repository.from_url(event["repository"]["html_url"])
+def pr_number
+  event.dig("pull_request", "number")
+end
 
-# commits = client.pull_request_commits(repo, pr_number)
+def reject_pr(message)
+  github_client.create_pull_request_review(
+    repo,
+    pr_number,
+    {
+      body: message,
+      event: "REQUEST_CHANGES",
+    }
+  )
+end
 
-client.create_pull_request_review(
-  repo,
-  pr_number,
-  {
-    body: "this is my comment",
-    event: "REQUEST_CHANGES",
-  }
-)
-
-# client.create_pull_request_comment(
-#   repo,
-#   pr_number,
-#   "This is the body",
-#   commits.first.sha,
-# )
-
-# @comment = @client.create_pull_request_comment \
-#   @test_repo,
-#   @pull.number,
-#   new_comment[:body],
-#   new_comment[:commit_id],
-#   new_comment[:path],
-#   new_comment[:position]
+reject_pr("You shall not pass.")
