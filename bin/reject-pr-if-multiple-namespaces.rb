@@ -17,11 +17,14 @@ repo = [name, owner].join("/")
 client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
 # current_repo = Octokit::Repository.from_url(event["repository"]["html_url"])
 
-client.create_pull_request_comment(
-  repo,
-  pr_number,
-  "This is the body"
-)
+commits = client.pull_request_commits(repo, pr_number)
+pp commits
+
+# client.create_pull_request_comment(
+#   repo,
+#   pr_number,
+#   "This is the body"
+# )
 
 # @comment = @client.create_pull_request_comment \
 #   @test_repo,
