@@ -3,6 +3,9 @@ kind: LimitRange
 metadata:
   name: limitrange
   namespace: check-financial-eligibility-production
+
+  change in a single namespace
+
 spec:
   limits:
   - default:
