@@ -12,6 +12,8 @@ puts `which git`
 # puts File.read(ENV['GITHUB_EVENT_PATH'])
 
 File.open("foobar", "w") { |f| f.puts("Hello from Ruby at #{Time.now}") }
+system("git config --global user.email 'github-actions@digital.justice.gov.uk'")
+system("git config --global user.name 'Github Actions'")
 system("git add foobar")
 system("git commit -m Whatever")
 system("git push origin master")
