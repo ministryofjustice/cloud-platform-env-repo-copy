@@ -2,6 +2,7 @@
 
 require "json"
 require "octokit"
+# require "pry-byebug"
 
 # TODO: how to display an informative failure message?
 # TODO: give the action a name that displays in the workflow
@@ -43,7 +44,8 @@ def reject_pr(message)
   exit 1
 end
 
-puts "token: #{ENV['GITHUB_TOKEN']}"
+puts File.read(ENV['GITHUB_EVENT_PATH'])
+# pp github_client.pull_request_files(repo, 11)
 
 # PRs which touch no namespaces are fine
 # PRs which touch one namespace are fine
