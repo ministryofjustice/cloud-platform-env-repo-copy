@@ -12,7 +12,7 @@ puts "pr_number: #{pr_number}"
 
 name = data.dig("repository", "name")
 owner = data.dig("repository", "owner", "login")
-repo = [name, owner].join("/")
+repo = [owner, name].join("/")
 
 client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
 # current_repo = Octokit::Repository.from_url(event["repository"]["html_url"])
