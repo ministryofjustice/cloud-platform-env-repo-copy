@@ -10,4 +10,5 @@ jobs:
       - run: pwd
       - run: ls
       - run: ls bin
+      - run: gem install octokit
       - run: ruby bin/action.rb
