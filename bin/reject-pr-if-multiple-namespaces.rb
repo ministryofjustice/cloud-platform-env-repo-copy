@@ -34,6 +34,7 @@ def reject_pr(message)
       event: "REQUEST_CHANGES",
     }
   )
+  exit 1
 end
 
 reject_pr("You shall not pass.")
