@@ -4,7 +4,7 @@ author: David Salgado <david.salgado@digital.justice.gov.uk>
 description: Fail PRs which touch multiple namespaces (because they're harder to review).
 
 jobs:
-  run_tools:
+  check-pr:
     runs-on: ubuntu-latest
     container:
       image: ministryofjustice/cloud-platform-tools:1.4-test
