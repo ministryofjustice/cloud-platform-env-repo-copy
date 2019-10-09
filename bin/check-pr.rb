@@ -32,6 +32,9 @@ def pr_number
 end
 
 def reject_pr(message)
+  puts "Requesting changes..."
+  puts message
+
   github_client.create_pull_request_review(
     repo,
     pr_number,
