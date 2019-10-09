@@ -3,8 +3,6 @@
 require "json"
 require "octokit"
 
-# TODO: rename this script
-
 NAMESPACE_REGEX = %r[namespaces.live-1.cloud-platform.service.justice.gov.uk]
 
 def github_client
@@ -34,6 +32,9 @@ def pr_number
 end
 
 def reject_pr(message)
+  puts "Requesting changes..."
+  puts message
+
   github_client.create_pull_request_review(
     repo,
     pr_number,
@@ -56,6 +57,8 @@ def namespaces_touched_by_pr
     .uniq
 end
 
+############################################################
+
 namespaces = namespaces_touched_by_pr
 
 # PRs which touch no namespaces are fine
@@ -67,7 +70,7 @@ if namespaces.size > 1
 
   #{namespace_list}
 
-  Please submit a separate PR for each namespace."
+  Please submit a separate PR for each namespace.
 
   EOF
   reject_pr(message)
