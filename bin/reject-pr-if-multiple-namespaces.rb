@@ -2,23 +2,24 @@
 
 require "json"
 require "octokit"
-require "pry-byebug"
 
-# TODO: how to display an informative failure message?
-# TODO: give the action a name that displays in the workflow
-# TODO: allow PRs that don't touch the namespaces folder(s)
-# TODO: allow PRs that only touch one namespace folder
-# TODO: replace the default icon for the bot
+# TODO: define a constant for namespace regex
+# TODO: use a heredoc for the message
+# TODO: rename this script
 
 def github_client
   unless ENV.key?("GITHUB_TOKEN")
-    raise "No GITHUB_TOKEN env. var. found. Please make this available via the github actions workflow\nhttps://help.github.com/en/articles/virtual-environments-for-github-actions#github_token-secret"
+    raise "No GITHUB_TOKEN env var found. Please make this available via the github actions workflow\nhttps://help.github.com/en/articles/virtual-environments-for-github-actions#github_token-secret"
   end
 
   @client ||= Octokit::Client.new(access_token: ENV["GITHUB_TOKEN"])
 end
 
 def event
+  unless ENV.key?("GITHUB_EVENT_PATH")
+    raise "No GITHUB_EVENT_PATH env var found. This script is designed to run via github actions, which will provide the github event via this env var."
+  end
+
   @evt ||= JSON.parse File.read(ENV["GITHUB_EVENT_PATH"])
 end
 
