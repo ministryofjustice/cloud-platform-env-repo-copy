@@ -29,6 +29,11 @@ def pr_number
   event.dig("pull_request", "number")
 end
 
+def branch
+  event.dig("pull_request", "head", "ref")
+end
+
 ############################################################
 
-put "Merged PR #{pr_number}"
+puts "Merged PR #{pr_number}"
+puts "Branch #{branch}"
