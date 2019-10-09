@@ -3,9 +3,10 @@
 require "json"
 require "octokit"
 
-# TODO: define a constant for namespace regex
 # TODO: use a heredoc for the message
 # TODO: rename this script
+
+NAMESPACE_REGEX = %r[namespaces.live-1.cloud-platform.service.justice.gov.uk]
 
 def github_client
   unless ENV.key?("GITHUB_TOKEN")
@@ -48,7 +49,7 @@ end
 def namespaces_touched_by_pr
   github_client.pull_request_files(repo, pr_number)
     .map(&:filename)
-    .grep(/namespaces.live-1.cloud-platform.service.justice.gov.uk/)
+    .grep(NAMESPACE_REGEX)
     .map { |f| File.dirname(f) }
     .map { |f| f.split("/") }
     .map { |arr| arr[2] }
