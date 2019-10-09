@@ -1,5 +1,7 @@
 on: [pull_request]
 name: Namespace PR checker
+author: David Salgado <david.salgado@digital.justice.gov.uk>
+description: Fail PRs which touch multiple namespaces (because they're harder to review).
 
 jobs:
   run_tools:
