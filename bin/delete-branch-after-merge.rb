@@ -35,5 +35,6 @@ end
 
 ############################################################
 
-puts "Merged PR #{pr_number}"
-puts "Branch #{branch}"
+puts "Merged PR: #{pr_number}"
+puts "Deleting branch: #{branch}"
+github_client.delete_branch(repo, branch)
