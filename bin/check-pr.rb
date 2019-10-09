@@ -70,7 +70,7 @@ if namespaces.size > 1
 
   #{namespace_list}
 
-  Please submit a separate PR for each namespace."
+  Please submit a separate PR for each namespace.
 
   EOF
   reject_pr(message)
