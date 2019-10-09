@@ -1,5 +1,5 @@
 on: [pull_request]
-name: Pull request checker
+name: Namespace PR checker
 
 jobs:
   run_tools:
