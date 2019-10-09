@@ -3,7 +3,6 @@
 require "json"
 require "octokit"
 
-# TODO: use a heredoc for the message
 # TODO: rename this script
 
 NAMESPACE_REGEX = %r[namespaces.live-1.cloud-platform.service.justice.gov.uk]
@@ -63,6 +62,13 @@ namespaces = namespaces_touched_by_pr
 # PRs which touch one namespace are fine
 if namespaces.size > 1
   namespace_list = namespaces.map {|n| "  * #{n}"}.join("\n")
-  message = "This PR affects multiple namespaces\n\n#{namespace_list}\n\nPlease submit a separate PR for each namespace."
+  message = <<~EOF
+  This PR affects multiple namespaces
+
+  #{namespace_list}
+
+  Please submit a separate PR for each namespace."
+
+  EOF
   reject_pr(message)
 end
