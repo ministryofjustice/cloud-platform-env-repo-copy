@@ -32,6 +32,9 @@ def pr_number
 end
 
 def reject_pr(message)
+  puts "Requesting changes..."
+  puts message
+
   github_client.create_pull_request_review(
     repo,
     pr_number,
@@ -67,7 +70,7 @@ if namespaces.size > 1
 
   #{namespace_list}
 
-  Please submit a separate PR for each namespace."
+  Please submit a separate PR for each namespace.
 
   EOF
   reject_pr(message)
