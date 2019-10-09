@@ -3,8 +3,6 @@
 require "json"
 require "octokit"
 
-# TODO: rename this script
-
 NAMESPACE_REGEX = %r[namespaces.live-1.cloud-platform.service.justice.gov.uk]
 
 def github_client
@@ -55,6 +53,8 @@ def namespaces_touched_by_pr
     .sort
     .uniq
 end
+
+############################################################
 
 namespaces = namespaces_touched_by_pr
 

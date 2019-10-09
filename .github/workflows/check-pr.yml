@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: gem install octokit
-      - run: ruby bin/reject-pr-if-multiple-namespaces.rb
+      - run: ruby bin/check-pr.rb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
