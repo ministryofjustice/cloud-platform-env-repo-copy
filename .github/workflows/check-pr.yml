@@ -1,11 +1,14 @@
 on: [pull_request]
+name: Namespace PR checker
 
 jobs:
-  run_tools:
+  check-pr:
     runs-on: ubuntu-latest
     container:
       image: ministryofjustice/cloud-platform-tools:1.4-test
     steps:
       - uses: actions/checkout@master
       - run: gem install octokit
-      - run: ruby bin/reject-pr-if-multiple-namespaces.rb
+      - run: ruby bin/check-pr.rb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
