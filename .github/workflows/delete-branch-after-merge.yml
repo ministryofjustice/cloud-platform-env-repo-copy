@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: gem install octokit
-      - name: Pull request merged
+      - name: Delete branch after merge
         if: github.event.pull_request.merged == true
         run: ruby bin/delete-branch-after-merge.rb
         env:
