@@ -1,8 +1,8 @@
+name: Namespace PR checker
+
 on:
   pull_request:
     types: [opened, edited, reopened]
-
-name: Namespace PR checker
 
 jobs:
   check-pr:
