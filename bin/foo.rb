@@ -52,14 +52,14 @@ def create_blobs(files)
 end
 
 def modified_files
-  `git status --porcelain=1 --untracked-files=no`
+  execute("git status --porcelain=1 --untracked-files=no")
     .split("\n")
     .map { |line| line.sub(" M ", "") }
 end
 
 def terraform_fmt
   terraform_directories_in_pr.each do |dir|
-    `terraform fmt #{dir}`
+    execute "terraform fmt #{dir}"
   end
 end
 
@@ -82,11 +82,16 @@ def files_in_pr
     .uniq
 end
 
+def execute(cmd)
+  puts "Running: #{cmd}"
+  `#{cmd}`
+end
+
 ############################################################
 
 terraform_fmt
 
 files = modified_files
 if files.any?
-  commit_files(branch, files, "Fixed formatting using `terraform fmt`")
+  commit_files(branch, files, "Fixed formatting using terraform fmt")
 end
