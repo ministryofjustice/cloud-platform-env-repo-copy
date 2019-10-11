@@ -93,5 +93,6 @@ terraform_fmt
 
 files = modified_files
 if files.any?
+  puts "Committing changes to:\n  #{files.join("\n  ")}"
   commit_files(branch, files, "Fixed formatting using terraform fmt")
 end
