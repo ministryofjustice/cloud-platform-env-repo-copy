@@ -6,9 +6,12 @@ on:
 
 jobs:
   check-pr:
+
     runs-on: ubuntu-latest
+
     container:
       image: ministryofjustice/cloud-platform-tools:1.4-test
+
     steps:
       - uses: actions/checkout@master
       - run: gem install octokit
