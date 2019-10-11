@@ -2,7 +2,6 @@
 
 require "json"
 require "octokit"
-require "pry-byebug" # TODO: remove
 
 def github
   unless ENV.key?("GITHUB_TOKEN")
@@ -76,8 +75,7 @@ def terraform_files_in_pr
 end
 
 def files_in_pr
-  # TODO: overriding PR number - should be pr_number
-  github.pull_request_files(repo, 31)
+  github.pull_request_files(repo, pr_number)
     .map(&:filename)
     .sort
     .uniq
