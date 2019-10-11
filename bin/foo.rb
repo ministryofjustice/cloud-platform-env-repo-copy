@@ -33,31 +33,29 @@ def branch
   event.dig("pull_request", "head", "ref")
 end
 
+def commit_files(branch, files, commit_message)
+  ref = "heads/#{branch}"
+  sha_latest_commit = github.ref(repo, ref).object.sha
+  sha_base_tree = github.commit(repo, sha_latest_commit).commit.tree.sha
+  changes = create_blobs files
+  sha_new_tree = github.create_tree(repo, changes, {:base_tree => sha_base_tree }).sha
+  sha_new_commit = github.create_commit(repo, commit_message, sha_new_tree, sha_latest_commit).sha
+  github.update_ref(repo, ref, sha_new_commit)
+end
+
+def create_blobs(files)
+  files.map do |file_name|
+    content = File.read(file_name)
+    blob_sha = github.create_blob(repo, Base64.encode64(content), "base64")
+    { :path => file_name, :mode => "100644", :type => "blob", :sha => blob_sha }
+  end
+end
+
+
 ############################################################
 
 puts "PR: #{pr_number}"
 puts "branch: #{branch}"
 puts "repo: #{repo}"
 
-ref = "heads/commit-a-file"
-
-sha_latest_commit = github.ref(repo, ref).object.sha
-
-puts sha_latest_commit
-
-sha_base_tree = github.commit(repo, sha_latest_commit).commit.tree.sha
-
-puts sha_base_tree
-
-changes = ["bin/foo.rb", "bin/add-files.rb"].map do |file_name|
-  content = File.read(file_name)
-  blob_sha = github.create_blob(repo, Base64.encode64(content), "base64")
-  { :path => file_name, :mode => "100644", :type => "blob", :sha => blob_sha }
-end
-
-sha_new_tree = github.create_tree(repo, changes, {:base_tree => sha_base_tree }).sha
-
-commit_message = "Committed via Octokit!"
-sha_new_commit = github.create_commit(repo, commit_message, sha_new_tree, sha_latest_commit).sha
-updated_ref = github.update_ref(repo, ref, sha_new_commit)
-puts updated_ref
+commit_files "commit-a-file", ["foo", "pr.json"], "Committed #{Time.now}"
