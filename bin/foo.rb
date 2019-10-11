@@ -2,6 +2,7 @@
 
 require "json"
 require "octokit"
+require "pry-byebug" # TODO: remove
 
 def github
   unless ENV.key?("GITHUB_TOKEN")
