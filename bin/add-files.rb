@@ -2,6 +2,7 @@
 
 require "json"
 require "octokit"
+require "pry-byebug"
 
 def github
   unless ENV.key?("GITHUB_TOKEN")
@@ -33,31 +34,47 @@ def branch
   event.dig("pull_request", "head", "ref")
 end
 
+def commit_files(branch, files, commit_message)
+  changes = files.map { |f| commit_change(f) }
+  binding.pry ; 1
+
+
+  t = get_tree(branch)
+  sha_latest_commit = t.fetch(:latest_commit)
+  sha_new_tree = t.fetch(:tree)
+  ref = t.fetch(:ref)
+
+  github.create_tree(repo, changes, { base_tree: sha_new_tree })
+  sha_new_commit = github.create_commit(repo, commit_message, sha_new_tree, sha_latest_commit).sha
+  github.update_ref(repo, ref, sha_new_commit)
+end
+
+def get_tree(branch)
+  ref = "heads/#{branch}"
+  latest_commit = github.ref(repo, ref).object.sha
+  tree = github.commit(repo, latest_commit).commit.tree.sha
+  { latest_commit: latest_commit, tree: tree, ref: ref }
+end
+
+def commit_change(file_name)
+  content = File.read(file_name)
+  blob_sha = github.create_blob(repo, Base64.encode64(content), "base64")
+  {
+    path: file_name,
+    mode: "100644",
+    type: "blob",
+    sha: blob_sha
+  }
+end
+
 ############################################################
 
 puts "PR: #{pr_number}"
 puts "branch: #{branch}"
 puts "repo: #{repo}"
 
-ref = "heads/commit-a-file"
-
-sha_latest_commit = github.ref(repo, ref).object.sha
-
-puts sha_latest_commit
-
-sha_base_tree = github.commit(repo, sha_latest_commit).commit.tree.sha
-
-puts sha_base_tree
-
-changes = ["bin/foo.rb", "bin/add-files.rb"].map do |file_name|
-  content = File.read(file_name)
-  blob_sha = github.create_blob(repo, Base64.encode64(content), "base64")
-  { :path => file_name, :mode => "100644", :type => "blob", :sha => blob_sha }
-end
-
-sha_new_tree = github.create_tree(repo, changes, {:base_tree => sha_base_tree }).sha
-
-commit_message = "Committed via Octokit!"
-sha_new_commit = github.create_commit(repo, commit_message, sha_new_tree, sha_latest_commit).sha
-updated_ref = github.update_ref(repo, ref, sha_new_commit)
-puts updated_ref
+commit_files(
+  "commit-a-file",
+  ["bad-pr.sh", "raise-pr.sh"],
+  "More files"
+)
