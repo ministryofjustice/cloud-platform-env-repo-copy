@@ -51,10 +51,18 @@ def create_blobs(files)
   end
 end
 
-def terraform_fmt
+def format_terraform_code
   terraform_directories_in_pr.each do |dir|
     execute "terraform fmt #{dir}"
   end
+  commit_changes "Applied changes made by `terraform fmt`"
+end
+
+def format_ruby_code
+  ruby_files_in_pr.each do |file|
+    execute "docker run --rm -v $(pwd):/app ministryofjustice/standardrb standardrb --fix #{file}"
+  end
+  commit_changes "Applied changes made by `standardrb --fix`"
 end
 
 def terraform_directories_in_pr
@@ -62,6 +70,10 @@ def terraform_directories_in_pr
     .map { |f| File.dirname(f) }
     .sort
     .uniq
+end
+
+def ruby_files_in_pr
+  files_in_pr.grep(/\.rb$/)
 end
 
 def terraform_files_in_pr
@@ -80,16 +92,6 @@ def execute(cmd)
   `#{cmd}`
 end
 
-def format_terraform_code
-  terraform_fmt
-  commit_changes "Commit changes made by `terraform fmt`"
-end
-
-def format_ruby_code
-  execute "standardrb --fix"
-  commit_changes "Commit changes made by `standardrb --fix`"
-end
-
 def commit_changes(message)
   files = modified_files
   if files.any?
@@ -99,12 +101,9 @@ def commit_changes(message)
 end
 
 def modified_files
-  files = execute("git status --porcelain=1 --untracked-files=no")
+  execute("git status --porcelain=1 --untracked-files=no")
     .split("\n")
     .map { |line| line.sub(" M ", "") }
-  puts "modified_files"
-  pp files
-  files
 end
 
 ############################################################
