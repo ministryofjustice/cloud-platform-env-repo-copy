@@ -9,8 +9,8 @@ puts "Merged PR: #{pr_number}"
 puts "Deleting branch: #{branch}"
 
 begin
-github.delete_branch(repo, branch)
+  github.delete_branch(repo, branch)
 rescue Octokit::UnprocessableEntity => e
-puts "Branch not found; already deleted?"
-pp e
+  puts "Branch not found; already deleted?"
+  pp e
 end
