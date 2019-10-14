@@ -11,7 +11,7 @@ jobs:
       image: ministryofjustice/cloud-platform-tools:1.4-test
     steps:
       - uses: actions/checkout@master
-      - run: gem install octokit
+      - run: gem install octokit standardrb
       - run: ruby bin/format-code.rb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
