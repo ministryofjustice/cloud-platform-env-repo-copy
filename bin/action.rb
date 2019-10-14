@@ -3,7 +3,7 @@
 require "json"
 require "octokit"
 
-          3uts "Hello from ruby"
+          puts "Hello from ruby"
           puts "Terraform is at..."
           puts `which terraform`
           puts `which git`
