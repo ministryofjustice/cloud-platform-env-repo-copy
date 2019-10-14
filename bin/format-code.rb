@@ -51,12 +51,6 @@ def create_blobs(files)
   end
 end
 
-def modified_files
-  execute("git status --porcelain=1 --untracked-files=no")
-    .split("\n")
-    .map { |line| line.sub(" M ", "") }
-end
-
 def terraform_fmt
   terraform_directories_in_pr.each do |dir|
     execute "terraform fmt #{dir}"
@@ -86,12 +80,31 @@ def execute(cmd)
   `#{cmd}`
 end
 
+def format_terraform_code
+  terraform_fmt
+  commit_changes
+end
+
+def format_ruby_code
+  execute "docker run --rm -v $(pwd):/app ministryofjustice/standardrb standardrb --fix"
+  commit_changes
+end
+
+def commit_changes
+  files = modified_files
+  if files.any?
+    puts "Committing changes to:\n  #{files.join("\n  ")}"
+    commit_files(branch, files, "Fixed formatting using terraform fmt")
+  end
+end
+
+def modified_files
+  execute("git status --porcelain=1 --untracked-files=no")
+    .split("\n")
+    .map { |line| line.sub(" M ", "") }
+end
+
 ############################################################
 
-terraform_fmt
-
-files = modified_files
-if files.any?
-  puts "Committing changes to:\n  #{files.join("\n  ")}"
-  commit_files(branch, files, "Fixed formatting using terraform fmt")
-end
+format_terraform_code
+format_ruby_code
