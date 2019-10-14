@@ -55,14 +55,14 @@ def format_terraform_code
   terraform_directories_in_pr.each do |dir|
     execute "terraform fmt #{dir}"
   end
-  commit_changes "Applied changes made by `terraform fmt`"
+  commit_changes "Commit changes made by `terraform fmt`"
 end
 
 def format_ruby_code
   ruby_files_in_pr.each do |file|
-    execute "docker run --rm -v $(pwd):/app ministryofjustice/standardrb standardrb --fix #{file}"
+    execute "standardrb --fix #{file}"
   end
-  commit_changes "Applied changes made by `standardrb --fix`"
+  commit_changes "Commit changes made by `standardrb --fix`"
 end
 
 def terraform_directories_in_pr
