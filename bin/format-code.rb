@@ -82,12 +82,12 @@ end
 
 def format_terraform_code
   terraform_fmt
-  commit_changes "Applied changes made by `terraform fmt`"
+  commit_changes "Commit changes made by `terraform fmt`"
 end
 
 def format_ruby_code
-  execute "docker run --rm -v $(pwd):/app ministryofjustice/standardrb standardrb --fix"
-  commit_changes "Applied changes made by `standardrb --fix`"
+  execute "standardrb --fix"
+  commit_changes "Commit changes made by `standardrb --fix`"
 end
 
 def commit_changes(message)
