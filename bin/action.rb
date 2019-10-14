@@ -12,7 +12,7 @@ puts `which git`
 
 pp ENV
 
-token = ENV['GITHUB_TOKEN']
+oken = ENV['GITHUB_TOKEN']
 puts "token: #{token}"
 
 event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
