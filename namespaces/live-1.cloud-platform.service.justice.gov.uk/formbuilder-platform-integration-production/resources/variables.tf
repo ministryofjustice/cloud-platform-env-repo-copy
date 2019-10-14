@@ -1,26 +1,26 @@
 # auto-generated from fb-cloud-platforms-environments
 variable "environment-name" {
-  default = "integration-production"
+default = "integration-production"
 }
 
 variable "team_name" {
-  default = "formbuilder"
+default = "formbuilder"
 }
 
 variable "db_backup_retention_period_submitter" {
-  default = "2"
+default = "2"
 }
 
 variable "db_backup_retention_period_user_datastore" {
-  default = "2"
+default = "2"
 }
 
 variable "is-production" {
-  default = "false"
+default = "false"
 }
 
 variable "infrastructure-support" {
-  default = "Form Builder form-builder-team@digital.justice.gov.uk"
+default = "Form Builder form-builder-team@digital.justice.gov.uk"
 }
 
 // The following two variables are provided at runtime by the pipeline.
