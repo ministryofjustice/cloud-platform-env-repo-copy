@@ -3,34 +3,34 @@
 # Submitter RDS
 
 module "submitter-rds-instance" {
-source = "github.com/ministryofjustice/cloud-platform-terraform-rds-instance?ref=4.4"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-rds-instance?ref=4.4"
 
-cluster_name               = "${var.cluster_name}"
-cluster_state_bucket       = "${var.cluster_state_bucket}"
-db_backup_retention_period = "${var.db_backup_retention_period_submitter}"
-application                = "formbuildersubmitter"
-environment-name           = "${var.environment-name}"
-is-production              = "${var.is-production}"
-infrastructure-support     = "${var.infrastructure-support}"
-eam_name                  = "${var.team_name}"
-force_ssl                  = true
-db_engine_version          = "10.9"
+  cluster_name               = "${var.cluster_name}"
+  cluster_state_bucket       = "${var.cluster_state_bucket}"
+  db_backup_retention_period = "${var.db_backup_retention_period_submitter}"
+  application                = "formbuildersubmitter"
+  environment-name           = "${var.environment-name}"
+  is-production              = "${var.is-production}"
+  infrastructure-support     = "${var.infrastructure-support}"
+  eam_name                   = "${var.team_name}"
+  force_ssl                  = true
+  db_engine_version          = "10.9"
 
-providers = {
-aws = "aws.london"
-}
+  providers = {
+    aws = "aws.london"
+  }
 }
 
 resource "kubernetes_secret" "submitter-rds-instance" {
-metadata {
-name      = "rds-instance-formbuilder-submitter-${var.environment-name}"
-namespace = "formbuilder-platform-${var.environment-name}"
-}
+  metadata {
+    name      = "rds-instance-formbuilder-submitter-${var.environment-name}"
+    namespace = "formbuilder-platform-${var.environment-name}"
+  }
 
-data {
-# postgres://USER:PASSWORD@HOST:PORT/NAME
-url = "postgres://${module.submitter-rds-instance.database_username}:${module.submitter-rds-instance.database_password}@${module.submitter-rds-instance.rds_instance_endpoint}/${module.submitter-rds-instance.database_name}"
-}
+  data {
+    # postgres://USER:PASSWORD@HOST:PORT/NAME
+    url = "postgres://${module.submitter-rds-instance.database_username}:${module.submitter-rds-instance.database_password}@${module.submitter-rds-instance.rds_instance_endpoint}/${module.submitter-rds-instance.database_name}"
+  }
 }
 
 ##################################################
@@ -38,26 +38,26 @@ url = "postgres://${module.submitter-rds-instance.database_username}:${module.su
 ########################################################
 # Submitter Elasticache Redis (for resque + job logging)
 module "submitter-elasticache" {
-source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=3.0"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=3.0"
 
-cluster_name         = "${var.cluster_name}"
-cluster_state_bucket = "${var.cluster_state_bucket}"
+  cluster_name         = "${var.cluster_name}"
+  cluster_state_bucket = "${var.cluster_state_bucket}"
 
-application            = "formbuildersubmitter"
-environment-name       = "${var.environment-name}"
-is-production          = "${var.is-production}"
-infrastructure-support = "${var.infrastructure-support}"
-eam_name              = "${var.team_name}"
+  application            = "formbuildersubmitter"
+  environment-name       = "${var.environment-name}"
+  is-production          = "${var.is-production}"
+  infrastructure-support = "${var.infrastructure-support}"
+  eam_name               = "${var.team_name}"
 }
 
 resource "kubernetes_secret" "submitter-elasticache" {
-metadata {
-name      = "elasticache-formbuilder-submitter-${var.environment-name}"
-namespace = "formbuilder-platform-${var.environment-name}"
-}
+  metadata {
+    name      = "elasticache-formbuilder-submitter-${var.environment-name}"
+    namespace = "formbuilder-platform-${var.environment-name}"
+  }
 
-data {
-primary_endpoint_address = "${module.submitter-elasticache.primary_endpoint_address}"
-auth_token               = "${module.submitter-elasticache.auth_token}"
-}
+  data {
+    primary_endpoint_address = "${module.submitter-elasticache.primary_endpoint_address}"
+    auth_token               = "${module.submitter-elasticache.auth_token}"
+  }
 }
