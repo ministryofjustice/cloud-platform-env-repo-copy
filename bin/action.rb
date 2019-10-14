@@ -3,10 +3,10 @@
 require "json"
 require "octokit"
 
-        puts "Hello from ruby"
-        puts "Terraform is at..."
-        puts `which terraform`
-        puts `which git`
+          3uts "Hello from ruby"
+          puts "Terraform is at..."
+          puts `which terraform`
+          puts `which git`
 
 # puts File.read(".git/config")
 
