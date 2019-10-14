@@ -1,7 +1,7 @@
-terraform {
-  backend "s3" {}
+erraform {
+backend "s3" {}
 }
 
 provider "aws" {
-  region = "eu-west-2"
+region = "eu-west-2"
 }
