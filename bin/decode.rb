@@ -10,7 +10,7 @@
 require 'yaml'
 require 'base64'
 
-hash = YAML.load($stdin.read)
-hash["data"] = hash.fetch("data").transform_values! { |v| Base64.decode64(v) }
+  hash = YAML.load($stdin.read)
+  hash["data"] = hash.fetch("data").transform_values! { |v| Base64.decode64(v) }
 
 puts hash.to_yaml
