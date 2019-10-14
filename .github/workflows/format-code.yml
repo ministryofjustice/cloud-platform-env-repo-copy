@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Format source code files
-      uses: ministryofjustice/github-action-code-formatter@v1
+      uses: ministryofjustice/github-action-code-formatter@v1.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
