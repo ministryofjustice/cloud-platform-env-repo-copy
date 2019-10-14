@@ -2,7 +2,7 @@ name: Namespace PR checker
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   check-pr:
