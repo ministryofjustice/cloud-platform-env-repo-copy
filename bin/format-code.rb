@@ -99,9 +99,12 @@ def commit_changes(message)
 end
 
 def modified_files
-  execute("git status --porcelain=1 --untracked-files=no")
+  files = execute("git status --porcelain=1 --untracked-files=no")
     .split("\n")
     .map { |line| line.sub(" M ", "") }
+  puts "modified_files"
+  pp files
+  files
 end
 
 ############################################################
