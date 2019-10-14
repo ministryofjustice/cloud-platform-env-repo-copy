@@ -12,7 +12,7 @@ module KubernetesValues
     when /^(\d+)m$/
       $1.to_i
     else
-      raise %[CPU value: "#{str}" was not in expected format]
+      raise %(CPU value: "#{str}" was not in expected format)
     end
   end
 
@@ -31,13 +31,12 @@ module KubernetesValues
     when /^(\d+)Mi/
       $1.to_i
     else
-      raise %[Memory value: "#{str}" was not in expected format]
+      raise %(Memory value: "#{str}" was not in expected format)
     end
   end
 end
 
 module FormatOutput
-
   private
 
   def format_line(title, col1, col2)
@@ -48,7 +47,6 @@ module FormatOutput
     ].join
   end
 end
-
 
 class Namespace
   attr_reader :name, :pods, :hard, :request, :used, :limitrange
@@ -70,16 +68,16 @@ class Namespace
   end
 
   def to_s
-    <<EOF
-NAMESPACE: #{name}
-  #{format_line("hard limit (cpu, memory):", hard_cpu, hard_mem)}
-  #{format_line("request limit (cpu, memory):", req_cpu, req_mem)}
-  #{format_line("used (cpu, memory):", used_cpu, used_mem)}
-  #{format_line("per-container request (cpu, memory):", limit_cpu, limit_mem)}
+    <<~EOF
+      NAMESPACE: #{name}
+      #{format_line("hard limit (cpu, memory):", hard_cpu, hard_mem)}
+      #{format_line("request limit (cpu, memory):", req_cpu, req_mem)}
+      #{format_line("used (cpu, memory):", used_cpu, used_mem)}
+      #{format_line("per-container request (cpu, memory):", limit_cpu, limit_mem)}
 
-PODS:
-#{pods.map(&:to_s).join("\n")}
-EOF
+      PODS:
+      #{pods.map(&:to_s).join("\n")}
+    EOF
   end
 
   private
@@ -94,7 +92,7 @@ EOF
   def add_used
     used_cpu = pods.map(&:containers).flatten.inject(0) { |sum, c| sum += cpu_value(c.used.dig("cpu")) }
     used_mem = pods.map(&:containers).flatten.inject(0) { |sum, c| sum += memory_value(c.used.dig("memory")) }
-    @used = { "cpu" => used_cpu, "memory" => used_mem }
+    @used = {"cpu" => used_cpu, "memory" => used_mem}
   end
 
   def add_request_limits
@@ -106,12 +104,12 @@ EOF
 
     @hard = {
       "cpu" => status.dig("hard", "limits.cpu"),
-      "memory" => status.dig("hard", "limits.memory")
+      "memory" => status.dig("hard", "limits.memory"),
     }
 
     @request = {
       "cpu" => status.dig("hard", "requests.cpu"),
-      "memory" => status.dig("hard", "requests.memory")
+      "memory" => status.dig("hard", "requests.memory"),
     }
   end
 
@@ -152,7 +150,7 @@ EOF
     pod, container, cpu, memory = line.split(" ")
     p = pods.find { |i| i.name == pod }
     c = p.containers.find { |i| i.name == container }
-    c.used = { "cpu" => cpu, "memory" => memory }
+    c.used = {"cpu" => cpu, "memory" => memory}
   end
 
   def get_pods(data)
@@ -180,14 +178,14 @@ class Container
   def initialize(args)
     @name = args.fetch(:name)
     @requests = args.fetch(:requests)
-    @used = { "cpu" => "0m", "memory" => "0Mi" }
+    @used = {"cpu" => "0m", "memory" => "0Mi"}
   end
 
   def to_s
     <<EOF
-    #{name}
-      #{format_line("requested (cpu, memory):", req_cpu, req_mem)}
-      #{format_line("used (cpu, memory):", used_cpu, used_mem)}
+  #{name}
+    #{format_line("requested (cpu, memory):", req_cpu, req_mem)}
+    #{format_line("used (cpu, memory):", used_cpu, used_mem)}
 EOF
   end
 
@@ -219,10 +217,10 @@ class Pod
   end
 
   def to_s
-    <<EOF
-  #{name}
-#{containers.map(&:to_s).join("\n")}
-EOF
+    <<~EOF
+      #{name}
+      #{containers.map(&:to_s).join("\n")}
+    EOF
   end
 
   private
@@ -244,11 +242,11 @@ def main(namespace)
 end
 
 def usage
-  puts <<EOF
+  puts <<~EOF
 
-Usage: #{$0} [namespace name]
+    Usage: #{$0} [namespace name]
 
-EOF
+  EOF
   exit
 end
 
