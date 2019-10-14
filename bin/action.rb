@@ -3,19 +3,19 @@
 require "json"
 require "octokit"
 
-  puts "Hello from ruby"
-  puts "Terraform is at..."
-  puts `which terraform`
-  puts `which git`
+puts "Hello from ruby"
+puts "Terraform is at..."
+puts `which terraform`
+puts `which git`
 
 # puts File.read(".git/config")
 
 pp ENV
 
-token = ENV['GITHUB_TOKEN']
+token = ENV["GITHUB_TOKEN"]
 puts "token: #{token}"
 
-event = JSON.parse(File.read(ENV['GITHUB_EVENT_PATH']))
+event = JSON.parse(File.read(ENV["GITHUB_EVENT_PATH"]))
 # puts event.inspect
 # puts File.read(ENV['GITHUB_EVENT_PATH'])
 
