@@ -1,0 +1,12 @@
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-branch-after-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: ministryofjustice/github-actions/branch-deleter@add-branch-deleter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
