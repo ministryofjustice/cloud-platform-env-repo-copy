@@ -10,5 +10,5 @@ jobs:
       - uses: ministryofjustice/github-actions/malformed-yaml@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          test: "\"
+          test: ""
 
