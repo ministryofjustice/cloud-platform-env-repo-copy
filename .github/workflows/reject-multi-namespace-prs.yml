@@ -1,0 +1,12 @@
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  reject-multi-namespace-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: ministryofjustice/github-actions/reject-multi-namespace-prs@reject-multi-namespace-prs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
